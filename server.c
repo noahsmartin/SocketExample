@@ -20,11 +20,6 @@
 
 #define BACKLOG 10     // how many pending connections queue will hold
 
-void sigchld_handler(int s)
-{
-    while(waitpid(-1, NULL, WNOHANG) > 0);
-}
-
 // get sockaddr, IPv4 or IPv6:
 void *get_in_addr(struct sockaddr *sa)
 {
