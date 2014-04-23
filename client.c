@@ -20,8 +20,10 @@ int main(int argc, char *argv[])
     struct addrinfo hints, *res, *addr_list;
     int status;
 
-    if (argc != 2) {
-        fprintf(stderr,"usage: client hostname\n");
+    FILE *outfile;
+
+    if (argc != 3) {
+      printf("usage: %s <hostname> <outfile>\n", argv[0]);
         return 1;
     }
 
@@ -54,14 +56,17 @@ int main(int argc, char *argv[])
         break;
     }
 
-    char rec[BUFFSIZE];
+    outfile = fopen(argv[2], "w");
+
+
+    unsigned char rec[BUFFSIZE];
     int len;
     while((len = recv(fd, rec, BUFFSIZE, 0)) > 0)
     {
     	int i;
     	for(i = 0; i < len; i++)
     	{
-    		printf("%c", toupper(rec[i]));
+    		fputc(rec[i], outfile);
     	}
     }
     if(len == -1)
@@ -72,6 +77,7 @@ int main(int argc, char *argv[])
     }
 
     close(fd);
+    fclose(outfile);
     freeaddrinfo(res); // free the linked list
 
     return 0;

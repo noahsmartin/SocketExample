@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
         while(sent != size)
         {
         	 int thisSize = send(new_fd, fileData, size, 0);
-        	 if(thisSize == -1)
+          if(thisSize == -1)
         	 {
         	 	perror("send error");
         	 	break;
