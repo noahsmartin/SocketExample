@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -13,7 +14,7 @@
 #include <unistd.h>
 #include <ctype.h>
 
-#define BUFFSIZE 5
+#define BUFFSIZE 104857600
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
     printf("Trying to connect to %s:\n", argv[1]);
 
     int fd;
-    for(addr_list = res;addr_list != NULL; addr_list = addr_list->ai_next) {
+    for(addr_list = res; addr_list != NULL; addr_list = addr_list->ai_next) {
         void *addr;
 
         
@@ -56,10 +57,16 @@ int main(int argc, char *argv[])
         break;
     }
 
+    if(addr_list == NULL)
+    {
+        printf("Could not connect to %s\n", argv[1]);
+        return 2;
+    }
+
     outfile = fopen(argv[2], "w");
 
 
-    unsigned char rec[BUFFSIZE];
+    unsigned char* rec = (unsigned char*) malloc(BUFFSIZE);
     int len;
     while((len = recv(fd, rec, BUFFSIZE, 0)) > 0)
     {
@@ -78,6 +85,7 @@ int main(int argc, char *argv[])
 
     close(fd);
     fclose(outfile);
+    free(rec);
     freeaddrinfo(res); // free the linked list
 
     return 0;
