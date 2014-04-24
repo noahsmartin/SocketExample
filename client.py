@@ -7,7 +7,7 @@ if len(sys.argv) != 3 :
 	print "usage: python %s <hostname> <outfile>" % sys.argv[0]
 	sys.exit(1)
 
-for res in socket.getaddrinfo(sys.argv[1], 3490, socket.AF_INET, socket.SOCK_STREAM):
+for res in socket.getaddrinfo(sys.argv[1], 3490, socket.AF_UNSPEC, socket.SOCK_STREAM):
 	family, socktype, proto, canonname, sockaddr = res
 	try:
 		s = socket.socket(family, socktype, proto)
@@ -20,6 +20,7 @@ for res in socket.getaddrinfo(sys.argv[1], 3490, socket.AF_INET, socket.SOCK_STR
 		s.close()
 		s = None
 		continue
+	break;
 if s is None:
 	print "Could not connect to %s" % sys.argv[1]
 	sys.exit(1)
