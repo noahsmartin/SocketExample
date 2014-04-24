@@ -31,6 +31,10 @@ file = open(sys.argv[1], "r")
 con, addr = s.accept()
 print "Connected to ", addr
 
+start = int(con.recv(1024))
+print "Server got: ", start
+file.seek(start * BUFFSIZE)  # Fast forward start blocks
+
 data = file.read(BUFFSIZE)
 while data :
 	con.sendall(data)
